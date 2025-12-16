@@ -1,109 +1,61 @@
-# Payroll Evolution (Evolução do Emprego EUA)
-
-> **Pipeline de Engenharia de Dados do *Nonfarm Payrolls* (NFP) dos EUA, executado no Azure Databricks com Unity Catalog e entrega final otimizada para Power BI.**
+# US Economy Monitor: Análise do Payroll & Pipeline Governança
 
 ![Status](https://img.shields.io/badge/Status-Concluído-success)
-![Stack](https://img.shields.io/badge/Stack-Azure%20Databricks%20|%20PySpark%20|%20DeltaLake%20|%20PowerBI-blue)
+![Stack](https://img.shields.io/badge/Stack-Azure%20Databricks%20|%20Unity%20Catalog%20|%20PowerBI-blue)
+
+> **"Como a maior economia do mundo se recuperou pós-2020?"**
+
+Este projeto não é apenas um pipeline de dados; é um **Monitor Econômico** focado no *Nonfarm Payrolls (NFP)*, um dos indicadores mais críticos para tomada de decisão no mercado financeiro global.
+
+O objetivo foi construir uma solução analítica robusta, onde a **Engenharia de Dados (Azure Databricks)** serve para garantir a **Qualidade e Governança (Unity Catalog)** da informação que chega ao dashboard.
 
 ---
 
-## 🖼️ Visão Geral do Dashboard
+## 📊 Visão do Analista (Dashboard)
 
-<img width="930" height="626" alt="Image" src="https://github.com/user-attachments/assets/68bad7ac-6129-428d-bff5-e1cc89991427" />
+O produto final é um painel que permite visualizar os ciclos econômicos e a volatilidade da criação de empregos nos EUA.
 
----
-
-## ☁️ Prova do Ambiente — Azure Databricks + Unity Catalog
-
-Este print valida a execução real no ambiente Azure Databricks, mostrando:
-
-- domínio *.azuredatabricks.net*  
-- catálogo governado `payroll`  
-- armazenamento no ADLS Gen2  
-- configuração Unity Catalog (metastore + storage root)
-
-<img width="1394" height="631" alt="Image" src="https://github.com/user-attachments/assets/39205097-9830-492c-b143-d842e94522cc" />
+<img width="930" height="626" alt="Dashboard Power BI Payroll" src="https://github.com/user-attachments/assets/68bad7ac-6129-428d-bff5-e1cc89991427" />
 
 ---
 
-## 💼 O Problema de Negócio
+## 🛡️ Governança e Qualidade (O Diferencial)
 
-O *Nonfarm Payrolls (NFP)* é um dos indicadores mais relevantes da economia americana  
-e do mercado financeiro. A série histórica é utilizada para:
+Para um Analista de Dados, a confiança na fonte é tudo. Por isso, este projeto utiliza o **Unity Catalog** no Azure. Isso garante que cada número no Power BI seja auditável e venha de uma fonte "Silver/Gold" certificada.
 
-1. 📉 compreender ciclos econômicos  
-2. 📈 antecipar decisões de política monetária  
-3. 💹 criar estratégias macro e quantitativas  
-
-O desafio: **criar um pipeline confiável e governado**, capaz de entregar uma camada Gold certificada para uso em BI e análises temporais.
+**Evidência do Ambiente (Azure + Unity Catalog):**
+<img width="1394" height="631" alt="Ambiente Databricks Unity Catalog" src="https://github.com/user-attachments/assets/39205097-9830-492c-b143-d842e94522cc" />
 
 ---
 
-## 🏗️ A Solução Técnica (Lakehouse no Azure)
+## 🛠 Arquitetura da Solução (Data Lineage)
 
-A arquitetura foi construída utilizando o **Azure Databricks**, com governança completa pelo **Unity Catalog**, seguindo o padrão **Medalhão**.
+Utilizei a arquitetura **Medalhão (Medallion Architecture)** para transformar dados brutos em inteligência de negócio:
 
-### **Arquitetura do Pipeline**
+### 1. Coleta e Ingestão (Camada Bronze)
+* Conexão direta com a API do **Bureau of Labor Statistics (BLS)** via Python.
+* Objetivo: Automatizar a busca do dado para não depender de downloads manuais.
 
-#### 🔶 Bronze — Ingestão Bruta
-- Coleta da API oficial do **Bureau of Labor Statistics (BLS)**  
-- Armazenamento em Delta Lake (sem transformação)
+### 2. Tratamento e Limpeza (Camada Silver)
+* Normalização de datas e tipagem de dados (Casting).
+* **Data Quality:** Garantia de que não existem registros duplicados ou nulos que distorçam a análise macroeconômica.
 
-#### 🔷 Silver — Limpeza e Padronização
-- Conversão e padronização de datas  
-- Tipagem correta dos atributos  
-- Tratamento da série temporal  
-- Particionamento por ano
-
-#### 🟡 Gold — Modelo Analítico para BI
-- Criação da tabela `ft_payroll_evolucao_eua`  
-- Ordenação temporal garantida (`ano_mes_chave`)  
-- Otimização com Delta Engine  
+### 3. Modelagem para BI (Camada Gold)
+* Criação da tabela fato `ft_payroll_evolucao_eua`.
+* Otimização para leitura rápida no **Power BI**.
 
 ---
 
-## 💡 Insights & Conclusões
+## 💼 Por que isso importa para o Negócio?
 
-### 📌 Choque Econômico de 2020
-A queda abrupta no Payroll devido à pandemia é claramente evidenciada na linha temporal, seguida pela recuperação em ondas subsequentes.
-
-### 📌 Camada Gold Certificada
-A tabela final é:
-
-- 🔒 Governada  
-- 🧹 Limpa  
-- ⚡ Otimizada  
-- 📊 Ideal para Power BI (DirectQuery ou Import)  
+O *Nonfarm Payrolls* move mercados. Ter um pipeline próprio permite:
+1.  **Independência:** Não depender de relatórios de terceiros.
+2.  **Histórico:** Capacidade de analisar tendências de longo prazo (pré e pós-pandemia).
+3.  **Agilidade:** O dado sai na API e atualiza o dashboard automaticamente.
 
 ---
 
 ## 💻 Tech Stack
-
-- **Cloud:** Azure Databricks  
-- **Storage:** Delta Lake + ADLS Gen2  
-- **Governança:** Unity Catalog  
-- **Linguagens:** Python (PySpark), SQL  
-- **Visualização:** Power BI  
-- **Arquitetura:** Lakehouse (Bronze → Silver → Gold)  
-
----
-
-## 🏁 Conclusão
-
-Este projeto demonstra a implementação de um pipeline moderno e governado em **Azure Databricks**, aplicando boas práticas de engenharia de dados, Delta Lake, Unity Catalog e Arquitetura Medalhão.
-
-O resultado final é um dataset confiável, versionado e otimizado — pronto para análises estratégicas no Power BI.
-
----
-
-## 🚀 Extensões Futuras
-
-- Previsão de Payroll com modelos de séries temporais  
-- Data Quality com Expectation Constraints  
-- Orquestração com Databricks Workflows  
-- Publicação da Gold como Delta Live Table  
-
-
-
-
-
+* **Análise & Viz:** Power BI, DAX.
+* **Engenharia & Governança:** Azure Databricks, Unity Catalog, Delta Lake.
+* **Linguagem:** Python (PySpark) e SQL.
